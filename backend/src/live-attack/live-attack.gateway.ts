@@ -34,7 +34,9 @@ export class LiveAttackGateway {
     @MessageBody() config: LiveAttackConfig,
     @ConnectedSocket() client: Socket,
   ) {
-    console.log(`Starting live attack: ${config.attackType} for client ${client.id}`);
+    console.log(
+      `Starting live attack: ${config.attackType} for client ${client.id}`,
+    );
 
     // Marquer cette simulation comme active
     this.activeSimulations.set(client.id, true);
@@ -51,10 +53,11 @@ export class LiveAttackGateway {
           logGenerator = this.liveAttackService.generateRansomwareLogs(config);
           break;
         case LiveAttackType.BRUTE_FORCE_VPN:
-          logGenerator = this.liveAttackService.generateBruteForceVpnLogs(config);
+          logGenerator =
+            this.liveAttackService.generateBruteForceVpnLogs(config);
           break;
         default:
-          throw new Error('Type d\'attaque non reconnu');
+          throw new Error("Type d'attaque non reconnu");
       }
 
       // Envoyer les logs en temps réel avec vérification d'arrêt
@@ -71,7 +74,10 @@ export class LiveAttackGateway {
       this.activeSimulations.delete(client.id);
 
       // Signaler la fin seulement si pas arrêté manuellement
-      if (this.activeSimulations.has(client.id) || !this.activeSimulations.get(client.id)) {
+      if (
+        this.activeSimulations.has(client.id) ||
+        !this.activeSimulations.get(client.id)
+      ) {
         client.emit('attackComplete', {
           message: 'Simulation terminée',
           timestamp: new Date().toISOString(),
@@ -125,7 +131,9 @@ export class LiveAttackGateway {
     @MessageBody() data: { target: string },
     @ConnectedSocket() client: Socket,
   ) {
-    console.log(`Starting vulnerability scan on ${data.target} for client ${client.id}`);
+    console.log(
+      `Starting vulnerability scan on ${data.target} for client ${client.id}`,
+    );
 
     try {
       client.emit('vulnScanStarted', {
@@ -134,7 +142,9 @@ export class LiveAttackGateway {
         timestamp: new Date().toISOString(),
       });
 
-      const report = await this.vulnerabilityScannerService.scanTarget(data.target);
+      const report = await this.vulnerabilityScannerService.scanTarget(
+        data.target,
+      );
 
       client.emit('vulnScanComplete', {
         report,

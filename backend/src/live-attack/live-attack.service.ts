@@ -15,7 +15,9 @@ const execAsync = promisify(exec);
 @Injectable()
 export class LiveAttackService {
   // Générateur de logs pour l'attaque Phishing
-  async* generatePhishingLogs(config: LiveAttackConfig): AsyncGenerator<AttackLog> {
+  async *generatePhishingLogs(
+    config: LiveAttackConfig,
+  ): AsyncGenerator<AttackLog> {
     const target = config.target || 'example-corp.com';
     const speed = this.getDelayForSpeed(config.speed);
 
@@ -45,7 +47,7 @@ export class LiveAttackService {
         timestamp: new Date().toISOString(),
         level: LogLevel.SUCCESS,
         message: '[INFRASTRUCTURE] Certificat SSL obtenu',
-        details: 'Let\'s Encrypt - Certificat valide pour crédibilité accrue',
+        details: "Let's Encrypt - Certificat valide pour crédibilité accrue",
         progress: 30,
       },
       {
@@ -66,14 +68,15 @@ export class LiveAttackService {
         timestamp: new Date().toISOString(),
         level: LogLevel.WARNING,
         message: '[CAMPAGNE] Envoi de 47 emails de phishing',
-        details: 'Taux d\'ouverture estimé: 40-60%',
+        details: "Taux d'ouverture estimé: 40-60%",
         progress: 60,
       },
       {
         timestamp: new Date().toISOString(),
         level: LogLevel.SUCCESS,
         message: '[COLLECTE] Premier utilisateur piégé',
-        details: 'Credentials récupérés: john.doe@example-corp.com / P@ssw0rd123',
+        details:
+          'Credentials récupérés: john.doe@example-corp.com / P@ssw0rd123',
         progress: 70,
       },
       {
@@ -106,7 +109,9 @@ export class LiveAttackService {
   }
 
   // Générateur de logs pour l'attaque Ransomware
-  async* generateRansomwareLogs(config: LiveAttackConfig): AsyncGenerator<AttackLog> {
+  async *generateRansomwareLogs(
+    config: LiveAttackConfig,
+  ): AsyncGenerator<AttackLog> {
     const speed = this.getDelayForSpeed(config.speed);
 
     const logs: AttackLog[] = [
@@ -163,7 +168,8 @@ export class LiveAttackService {
         timestamp: new Date().toISOString(),
         level: LogLevel.WARNING,
         message: '[EXFILTRATION] Extraction de données sensibles',
-        details: '45 GB de données compressées et transférées (comptabilité, RH)',
+        details:
+          '45 GB de données compressées et transférées (comptabilité, RH)',
         progress: 70,
       },
       {
@@ -196,7 +202,9 @@ export class LiveAttackService {
   }
 
   // Générateur de logs pour l'attaque Brute Force VPN
-  async* generateBruteForceVpnLogs(config: LiveAttackConfig): AsyncGenerator<AttackLog> {
+  async *generateBruteForceVpnLogs(
+    config: LiveAttackConfig,
+  ): AsyncGenerator<AttackLog> {
     const target = config.target || '192.168.1.1';
     const speed = this.getDelayForSpeed(config.speed);
 
@@ -204,7 +212,7 @@ export class LiveAttackService {
       {
         timestamp: new Date().toISOString(),
         level: LogLevel.INFO,
-        message: '[RECONNAISSANCE] Scan du point d\'accès VPN',
+        message: "[RECONNAISSANCE] Scan du point d'accès VPN",
         details: `Cible: ${target} - Détection du type de VPN`,
         progress: 5,
       },
@@ -218,8 +226,9 @@ export class LiveAttackService {
       {
         timestamp: new Date().toISOString(),
         level: LogLevel.INFO,
-        message: '[ÉNUMÉRATION] Collecte des noms d\'utilisateurs',
-        details: '127 emails employés récupérés via LinkedIn et fuites de données',
+        message: "[ÉNUMÉRATION] Collecte des noms d'utilisateurs",
+        details:
+          '127 emails employés récupérés via LinkedIn et fuites de données',
         progress: 20,
       },
       {
@@ -275,7 +284,7 @@ export class LiveAttackService {
         timestamp: new Date().toISOString(),
         level: LogLevel.CRITICAL,
         message: '[PERSISTANCE] Accès VPN établi et backdoor créé',
-        details: 'Compte secondaire créé pour maintenir l\'accès',
+        details: "Compte secondaire créé pour maintenir l'accès",
         progress: 100,
       },
     ];
@@ -286,19 +295,32 @@ export class LiveAttackService {
     }
   }
 
-  async scanTarget(target: string, scanType: 'quick' | 'full' = 'quick'): Promise<NmapScanResult> {
+  async scanTarget(
+    target: string,
+    scanType: 'quick' | 'full' = 'quick',
+  ): Promise<NmapScanResult> {
     if (!this.isValidTargetFormat(target)) {
-      throw new Error('Format de cible invalide. Utilisez une adresse IP ou un nom de domaine valide.');
+      throw new Error(
+        'Format de cible invalide. Utilisez une adresse IP ou un nom de domaine valide.',
+      );
     }
 
-    console.warn(`[NMAP SCAN] Target: ${target} | Type: ${scanType} | Timestamp: ${new Date().toISOString()}`);
-    console.warn('[SECURITY] Assurez-vous d\'avoir l\'autorisation explicite pour scanner cette cible.');
+    console.warn(
+      `[NMAP SCAN] Target: ${target} | Type: ${scanType} | Timestamp: ${new Date().toISOString()}`,
+    );
+    console.warn(
+      "[SECURITY] Assurez-vous d'avoir l'autorisation explicite pour scanner cette cible.",
+    );
 
     return this.scanTargetDirect(target, scanType);
   }
 
-  private async scanTargetDirect(target: string, scanType: 'quick' | 'full'): Promise<NmapScanResult> {
-    const scanOptions = scanType === 'quick' ? '-sV -F -T4 -Pn' : '-sV -p- -T4 -Pn';
+  private async scanTargetDirect(
+    target: string,
+    scanType: 'quick' | 'full',
+  ): Promise<NmapScanResult> {
+    const scanOptions =
+      scanType === 'quick' ? '-sV -F -T4 -Pn' : '-sV -p- -T4 -Pn';
     const command = `nmap ${scanOptions} ${target}`;
 
     console.log(`[NMAP DIRECT] Executing: ${command}`);
@@ -342,7 +364,9 @@ export class LiveAttackService {
       console.error(`[NMAP DIRECT] Error:`, error);
 
       if (error.code === 'ENOENT') {
-        throw new Error('nmap n\'est pas installé ou n\'est pas dans le PATH. Installez-le avec: sudo apt-get install nmap');
+        throw new Error(
+          "nmap n'est pas installé ou n'est pas dans le PATH. Installez-le avec: sudo apt-get install nmap",
+        );
       }
 
       if (error.killed) {
@@ -353,19 +377,23 @@ export class LiveAttackService {
     }
   }
 
-  private async scanTargetWithNodeNmap(target: string, scanType: 'quick' | 'full'): Promise<NmapScanResult> {
+  private async scanTargetWithNodeNmap(
+    target: string,
+    scanType: 'quick' | 'full',
+  ): Promise<NmapScanResult> {
     return new Promise((resolve, reject) => {
-      // Options nmap : scan de version pour avoir plus d'infos
-      const scanOptions = scanType === 'quick'
-        ? '-sV -F -T4 -Pn'
-        : '-sV -p- -T4 -Pn';
+      const scanOptions =
+        scanType === 'quick' ? '-sV -F -T4 -Pn' : '-sV -p- -T4 -Pn';
 
       console.log(`[NMAP] Starting scan with options: ${scanOptions}`);
 
       const quickscan = new nmap.QuickScan(target, scanOptions);
 
       quickscan.on('complete', (data) => {
-        console.log('[NMAP] Scan complete, raw data:', JSON.stringify(data, null, 2));
+        console.log(
+          '[NMAP] Scan complete, raw data:',
+          JSON.stringify(data, null, 2),
+        );
 
         const result: NmapScanResult = {
           host: target,
@@ -399,7 +427,9 @@ export class LiveAttackService {
 
           if (hostData.ports) {
             console.log('[NMAP] Trying ports property:', hostData.ports);
-            const ports = Array.isArray(hostData.ports) ? hostData.ports : [hostData.ports];
+            const ports = Array.isArray(hostData.ports)
+              ? hostData.ports
+              : [hostData.ports];
             result.ports = ports
               .filter((p: any) => p.state === 'open')
               .map((port: any) => ({
@@ -411,7 +441,11 @@ export class LiveAttackService {
           }
         }
 
-        if (hostData.os && Array.isArray(hostData.os) && hostData.os.length > 0) {
+        if (
+          hostData.os &&
+          Array.isArray(hostData.os) &&
+          hostData.os.length > 0
+        ) {
           result.os = hostData.os[0].name || 'Unknown';
         }
 
@@ -433,10 +467,10 @@ export class LiveAttackService {
     });
   }
 
-
   private isValidTargetFormat(target: string): boolean {
     const ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
-    const domainPattern = /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+    const domainPattern =
+      /^([a-zA-Z0-9]([a-zA-Z0-9]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
     const localhostPattern = /^localhost$/i;
 
     if (localhostPattern.test(target)) {
@@ -445,7 +479,7 @@ export class LiveAttackService {
 
     if (ipPattern.test(target)) {
       const octets = target.split('.').map(Number);
-      return octets.every(octet => octet >= 0 && octet <= 255);
+      return octets.every((octet) => octet >= 0 && octet <= 255);
     }
 
     return domainPattern.test(target);
@@ -464,6 +498,6 @@ export class LiveAttackService {
   }
 
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

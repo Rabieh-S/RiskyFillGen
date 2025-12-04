@@ -1,11 +1,20 @@
-import { Controller, Get, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AttackSimulatorService } from './attack-simulator.service';
 import { AttackType } from './types';
 import type { SimulationRequest } from './types';
 
 @Controller('api/attack-simulator')
 export class AttackSimulatorController {
-  constructor(private readonly attackSimulatorService: AttackSimulatorService) {}
+  constructor(
+    private readonly attackSimulatorService: AttackSimulatorService,
+  ) {}
 
   @Get('attack-types')
   getAttackTypes() {
@@ -20,19 +29,21 @@ export class AttackSimulatorController {
     try {
       if (!request.attackType) {
         throw new HttpException(
-          'Le type d\'attaque est requis',
+          "Le type d'attaque est requis",
           HttpStatus.BAD_REQUEST,
         );
       }
 
       if (!Object.values(AttackType).includes(request.attackType)) {
         throw new HttpException(
-          'Type d\'attaque invalide',
+          "Type d'attaque invalide",
           HttpStatus.BAD_REQUEST,
         );
       }
 
-      const result = this.attackSimulatorService.simulateAttack(request.attackType);
+      const result = this.attackSimulatorService.simulateAttack(
+        request.attackType,
+      );
 
       return {
         success: true,
